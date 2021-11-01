@@ -1,7 +1,10 @@
 package br.com.blocker.blockersapi.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,12 +25,16 @@ import reactor.core.publisher.Mono;
 public class BlockersController {
 	
 	@Autowired
-	final IpService ipService;
+	IpService ipService;
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Ip> createCustomer(@RequestBody Ip ip) {
-        return ipService.save(ip);
+    public ResponseEntity<Mono<Ip>> createCustomer(@Valid @RequestBody Ip ip) {
+    	
+    	return ResponseEntity
+    			.status(HttpStatus.CREATED)
+    			.header("X-Blocker-Message", "Ip blocked")
+    			.body(ipService.save(ip)); 
     }
     
     @GetMapping("/ip")

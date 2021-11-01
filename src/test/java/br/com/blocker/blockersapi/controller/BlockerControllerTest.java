@@ -23,7 +23,6 @@ import reactor.core.publisher.Flux;
 @ActiveProfiles("test")
 public class BlockerControllerTest {
 
-
     @Autowired
     private WebTestClient webTestClient;
 
