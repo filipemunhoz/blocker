@@ -25,13 +25,13 @@ public class IpService {
 	@Autowired
 	private IpRepository ipRepository;
 	
-	  private final ReactiveRedisConnectionFactory factory;
-	  private final ReactiveRedisOperations<String, String> coffeeOps;
+	private final ReactiveRedisConnectionFactory factory;
+	private final ReactiveRedisOperations<String, String> operations;
 
-	  public IpService(ReactiveRedisConnectionFactory factory, ReactiveRedisOperations<String, String> coffeeOps) {
-	    this.factory = factory;
-	    this.coffeeOps = coffeeOps;
-	  }
+	public IpService(ReactiveRedisConnectionFactory factory, ReactiveRedisOperations<String, String> operations) {
+		this.factory = factory;
+		this.operations = operations;
+	}
 	
     public Mono<String> save(@RequestBody IpRequest request) {
 
@@ -72,12 +72,11 @@ public class IpService {
     
     public Mono<String> loadDataToRedis(){
 
-//    	factory.getReactiveConnection().serverCommands().flushAll().thenMany(
-//    			ipRepository.findAll()
-//    						.flatMap(ips -> coffeeOps.opsForValue().set(ips.getAddress(), ips.getAddress())))
-//    						.subscribe();
+    	factory.getReactiveConnection().serverCommands().flushAll().thenMany(
+    			ipRepository.findAll()
+    						.flatMap(ips -> operations.opsForValue().set(InetAddresses.fromInteger(ips.getAddress()).getHostAddress(), ips.getOrigin())))
+    						.subscribe();
     	
-    	// TODO implementar
-    	return Mono.just("OK");
+    	return Mono.just("Loaded data to Redis");
     }
 }

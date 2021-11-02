@@ -16,6 +16,7 @@ public class IpBatchLoader {
 	@Scheduled(fixedRate = 5000, initialDelay = 5 * 1000)
 	public void loadBlockedIpsToRedis() {
 		System.out.println("################ LOADING");
+		service.loadDataToRedis();
 	}
 	
 }
