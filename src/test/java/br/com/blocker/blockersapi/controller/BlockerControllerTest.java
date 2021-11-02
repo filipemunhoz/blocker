@@ -45,29 +45,29 @@ public class BlockerControllerTest {
     }
     
 	
-    @Test
-    @Order(1)
-    public void createCustomer() {
-    	
-        Ip ip = Ip.builder()
-                .id(null)
-                .address("192.168.0.18")
-                .origin("Business")
-                .build();
-
-        webTestClient
-                .post()
-                .uri("/")
-                .body(BodyInserters.fromValue(ip))
-                .accept(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful()
-                .expectBody(Ip.class)
-                .value((ipAddress) ->
-                        assertNotNull(ipAddress.getId())
-                );
-    }
+//    @Test
+//    @Order(1)
+//    public void createCustomer() {
+//    	
+//        Ip ip = Ip.builder()
+//                .id(null)
+//                .address("192.168.0.18")
+//                .origin("Business")
+//                .build();
+//
+//        webTestClient
+//                .post()
+//                .uri("/")
+//                .body(BodyInserters.fromValue(ip))
+//                .accept(MediaType.APPLICATION_JSON)
+//                .exchange()
+//                .expectStatus()
+//                .is2xxSuccessful()
+//                .expectBody(Ip.class)
+//                .value((ipAddress) ->
+//                        assertNotNull(ipAddress.getId())
+//                );
+//    }
     
     @Test
     @Order(2)

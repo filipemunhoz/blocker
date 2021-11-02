@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-//@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, RedisAutoConfiguration.class, RedisRepositoriesAutoConfiguration.class})
 @EnableScheduling
 public class BlockersApiApplication {
 
@@ -13,3 +12,5 @@ public class BlockersApiApplication {
 		SpringApplication.run(BlockersApiApplication.class, args);
 	}
 }
+
+// TODOS - Criar Docker com MySQL e Redis

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.blocker.blockersapi.entity.ip.Ip;
+import br.com.blocker.blockersapi.request.IpRequest;
 import br.com.blocker.blockersapi.service.IpService;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -29,12 +30,12 @@ public class BlockersController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Mono<Ip>> createCustomer(@Valid @RequestBody Ip ip) {
+    public ResponseEntity<Mono<String>> createCustomer(@Valid @RequestBody IpRequest request) {
     	
     	return ResponseEntity
     			.status(HttpStatus.CREATED)
     			.header("X-Blocker-Message", "Ip blocked")
-    			.body(ipService.save(ip)); 
+    			.body(ipService.save(request)); 
     }
     
     @GetMapping("/ip")
