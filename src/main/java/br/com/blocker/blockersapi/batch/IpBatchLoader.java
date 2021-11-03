@@ -11,12 +11,10 @@ public class IpBatchLoader {
 	
 	@Autowired
 	final IpService service = null;
-
 	
-	@Scheduled(fixedRate = 5000, initialDelay = 5 * 1000)
+	@Scheduled(fixedRate = 60 * 1000, initialDelay = 5 * 1000)
 	public void loadBlockedIpsToRedis() {
 		System.out.println("################ LOADING");
-		service.loadDataToRedis();
+		service.loadDataToRedis().subscribe();
 	}
-	
 }

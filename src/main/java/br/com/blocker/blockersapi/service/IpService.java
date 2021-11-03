@@ -2,19 +2,23 @@ package br.com.blocker.blockersapi.service;
 
 import java.net.InetAddress;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.validator.routines.InetAddressValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.google.common.net.InetAddresses;
 
 import br.com.blocker.blockersapi.entity.ip.Ip;
+import br.com.blocker.blockersapi.entity.ip.Ipv6;
 import br.com.blocker.blockersapi.repository.IpRepository;
+import br.com.blocker.blockersapi.repository.Ipv6Repository;
 import br.com.blocker.blockersapi.request.IpRequest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -22,8 +26,8 @@ import reactor.core.publisher.Mono;
 @Service
 public class IpService {
 	
-	@Autowired
-	private IpRepository ipRepository;
+	@Autowired private IpRepository ipRepository;
+	@Autowired private Ipv6Repository ipv6Repository;
 	
 	private final ReactiveRedisConnectionFactory factory;
 	private final ReactiveRedisOperations<String, String> operations;
@@ -46,20 +50,31 @@ public class IpService {
         				.build();
         	
         	ipRepository.save(ipv4).subscribe();
-        	return Mono.just("OK");
+        	return Mono.just(String.format("IpV4: %s - Saved", request.getAddress()));
     	}
     	
-       	final Boolean isValidIp = InetAddressValidator.getInstance().isValid(request.getAddress());    	
-    	if(!isValidIp) {
-    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Invalid ip: ", request.getAddress()));
-    	}    	
-    	return Mono.just("OK");
+    	if(InetAddressValidator.getInstance().isValidInet6Address(request.getAddress())) {
+    		
+    		byte[] addr = Base64.decodeBase64(request.getAddress());
+    		final Ipv6 ipv6 = Ipv6.builder()
+    					.address(addr)
+    					.origin(request.getOrigin())
+    					.build();
+    		ipv6Repository.save(ipv6).subscribe();
+    		return Mono.just(String.format("IpV6: %s - Saved", request.getAddress()));
+    	}
+    	
+    	throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Invalid ip: ", request.getAddress()));
     }
     
     public Mono<Ip> findById(Long id) {
         return ipRepository.findById(id);
     }
 
+    public Mono<String> findByIdOnCache(String ip) {
+    	return operations.opsForValue().get(ip);
+    }
+    
     public Flux<Ip> findAll() {
         return ipRepository.findAll();
     }

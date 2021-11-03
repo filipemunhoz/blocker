@@ -4,9 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.blocker.blockersapi.entity.ip.Ip;
 import br.com.blocker.blockersapi.request.IpRequest;
 import br.com.blocker.blockersapi.service.IpService;
 import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -40,19 +36,9 @@ public class BlockersController {
     			.body(ipService.save(request)); 
     }
     
-    @GetMapping("/{id}")
-    public Mono<Ip> getCustomer(@PathVariable String id) {    	
-    	return ipService.findById(Long.valueOf(id));
-    }
-    
-    
-    @GetMapping("/")
-    public Flux<Ip> getAll() {
-        return ipService.findAll();
-    }
-    
-    @DeleteMapping("/")
-    public Mono<Ip> deleteById(Long id) {
-        return this.ipService.deleteById(id);
-    }
+    @GetMapping("{ip}")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<String> getCustomer(@PathVariable String ip) {    	
+    	return ipService.findByIdOnCache(ip);
+    }    
 }
