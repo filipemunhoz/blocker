@@ -71,6 +71,10 @@ public class IpService {
         return ipRepository.findById(id);
     }
 
+    public Mono<Ipv6> findByIdIpv6(Long id) {
+        return ipv6Repository.findById(id);
+    }
+    
     public Mono<String> findByIdOnCache(String ip) {
     	return operations.opsForValue().get(ip);
     }
@@ -91,6 +95,9 @@ public class IpService {
     			ipRepository.findAll()
     						.flatMap(ips -> operations.opsForValue().set(InetAddresses.fromInteger(ips.getAddress()).getHostAddress(), ips.getOrigin())))
     						.subscribe();
+
+    	ipv6Repository.findAll()
+					.flatMap(ipv6 -> operations.opsForValue().set(Base64.encodeBase64String(ipv6.getAddress()), ipv6.getOrigin()));
     	
     	return Mono.just("Loaded data to Redis");
     }
