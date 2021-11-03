@@ -96,8 +96,10 @@ public class IpService {
     						.flatMap(ips -> operations.opsForValue().set(InetAddresses.fromInteger(ips.getAddress()).getHostAddress(), ips.getOrigin())))
     						.subscribe();
 
-    	ipv6Repository.findAll()
-					.flatMap(ipv6 -> operations.opsForValue().set(Base64.encodeBase64String(ipv6.getAddress()), ipv6.getOrigin()));
+    	factory.getReactiveConnection().serverCommands().save().thenMany(
+    			ipv6Repository.findAll()
+							.flatMap(ipv6 -> operations.opsForValue().set(Base64.encodeBase64String(ipv6.getAddress()), ipv6.getOrigin())))
+    			.subscribe();
     	
     	return Mono.just("Loaded data to Redis");
     }
