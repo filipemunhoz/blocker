@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.blocker.blockersapi.entity.ip.Ipv6;
 import br.com.blocker.blockersapi.request.IpRequest;
 import br.com.blocker.blockersapi.service.IpService;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +24,11 @@ import reactor.core.publisher.Mono;
 public class BlockersController {
 	
 	@Autowired
-	IpService ipService;
+	private IpService ipService;
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Mono<String>> createCustomer(@Valid @RequestBody IpRequest request) {
+    public ResponseEntity<Mono<String>> addIp(@Valid @RequestBody IpRequest request) {
     	
     	return ResponseEntity
     			.status(HttpStatus.CREATED)
@@ -41,11 +40,5 @@ public class BlockersController {
     @ResponseStatus(HttpStatus.OK)
     public Mono<String> getIp(@PathVariable String ip) {    	
     	return ipService.findByIdOnCache(ip);
-    }
-    
-    @GetMapping("/ipv6/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<Ipv6> getIpv6(@PathVariable String id) {    	
-    	return ipService.findByIdIpv6(Long.valueOf(id));
     }    
 }

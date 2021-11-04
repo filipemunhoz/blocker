@@ -12,5 +12,3 @@ public class BlockersApiApplication {
 		SpringApplication.run(BlockersApiApplication.class, args);
 	}
 }
-
-// TODOS - Criar Docker com MySQL e Redis

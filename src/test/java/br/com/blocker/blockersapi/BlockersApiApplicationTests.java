@@ -8,6 +8,7 @@ class BlockersApiApplicationTests {
 
 	@Test
 	void contextLoads() {
+		BlockersApiApplication.main(new String[] {});
 	}
 
 }

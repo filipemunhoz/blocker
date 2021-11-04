@@ -5,22 +5,16 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Table
-public class Ip {
+@AllArgsConstructor
+@Table(value = "ip")
+public class Ipv4 {
 	
-    public Ip(final Integer address, final String origin) {
-		super();
-		this.address = address;
-		this.origin = origin;
-	}
-
 	@Id
     private Long id;
 	private Integer address;
