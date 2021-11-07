@@ -11,7 +11,7 @@ import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 @SpringBootTest
-public class IpServiceTest {
+class IpServiceTest {
 	
     @Autowired
     ConnectionFactory cf;
@@ -20,7 +20,7 @@ public class IpServiceTest {
 	IpService service;
 	
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         Flux.from(cf.create())
                 .flatMap(c ->
                         c.createBatch()
@@ -39,7 +39,7 @@ public class IpServiceTest {
 
 	@Test
 	@Order(1)
-	public void findAllTest() {		
+	void findAllTest() {		
 		StepVerifier.create(service.findAll())
 				.expectNextCount(2)
 				.verifyComplete();
@@ -47,7 +47,7 @@ public class IpServiceTest {
 	
 	@Test
 	@Order(2)
-	public void findByIdIpv4Test() {		
+	void findByIdIpv4Test() {		
 		StepVerifier.create(service.findByIdIpv4(1L))
 		.expectNextCount(1)
 		.verifyComplete();		
@@ -55,7 +55,7 @@ public class IpServiceTest {
 	
 	@Test
 	@Order(3)
-	public void findByIdIpv6Test() {		
+	void findByIdIpv6Test() {		
 		StepVerifier.create(service.findByIdIpv6(1L))
 		.expectNextCount(1)
 		.verifyComplete();
@@ -63,7 +63,7 @@ public class IpServiceTest {
 	
 	@Test
 	@Order(4)
-	public void deleteByIdTest() {		
+	void deleteByIdTest() {		
 		StepVerifier.create(service.deleteById(1L))
 		.expectNextCount(1)
 		.verifyComplete();

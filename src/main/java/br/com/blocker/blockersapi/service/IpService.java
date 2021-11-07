@@ -57,7 +57,7 @@ public class IpService {
     		return Mono.just(String.format("IpV6: %s - Saved", request.getAddress()));
     	}
     	
-    	throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Invalid ip: ", request.getAddress()));
+    	throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Invalid ip: %s", request.getAddress()));
     }
     
     public Mono<Ipv4> findByIdIpv4(Long id) {

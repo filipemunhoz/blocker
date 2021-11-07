@@ -3,7 +3,6 @@ package br.com.blocker.blockersapi.controller;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ import reactor.core.publisher.Flux;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class BlockerControllerTest {
+class BlockerControllerTest {
 
     @Autowired
     private WebTestClient webTestClient;
@@ -32,7 +31,7 @@ public class BlockerControllerTest {
     IpService service;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         Flux.from(cf.create())
                 .flatMap(c ->
                         c.createBatch()
@@ -50,7 +49,7 @@ public class BlockerControllerTest {
 	
     @Test
     @Order(1)
-    public void addIpV4() {
+    void addIpV4() {
     	
     	IpRequest ip = new IpRequest("192.168.1.1", "STS-IPV4");
 
@@ -64,13 +63,13 @@ public class BlockerControllerTest {
                 .is2xxSuccessful()
                 .expectBody(String.class)
                 .value(s ->
-                        assertEquals(s, "IpV4: 192.168.1.1 - Saved")
+                        assertEquals("IpV4: 192.168.1.1 - Saved", s)
                 );
     }
     
     @Test
     @Order(2)
-    public void addIpV6() {
+    void addIpV6() {
     	
     	IpRequest ip = new IpRequest("fe80::a8c6:6cff:fe96:7fd1", "STS-IPV6");
 
@@ -90,7 +89,7 @@ public class BlockerControllerTest {
 
     @Test
     @Order(3)
-    public void invalidIp() {
+    void invalidIp() {
     	
     	IpRequest ip = new IpRequest("AAA.BBB.CCC.DDD", "STS-IPV6");
 
@@ -106,7 +105,7 @@ public class BlockerControllerTest {
     
     @Test
     @Order(4)
-    public void invalidSize() {
+    void invalidSize() {
     	
     	IpRequest ip = new IpRequest("AAA", "STS-IPV6");
 
@@ -120,61 +119,10 @@ public class BlockerControllerTest {
                 .is4xxClientError();
     }    
     
-    
-    
-    @Disabled
-    @Test
-    @Order(3)
-    public void loadDataToRedis() {    	
-    	service.loadDataToRedis().subscribe(System.out::println);
-    }
-    	
-    
-//    @Test
-//    @Order(4)
-//    public void getIp() {
-//        webTestClient
-//                .get()
-//                .uri("/")
-//                .accept(MediaType.APPLICATION_JSON)
-//                .exchange()
-//                .expectStatus()
-//                .isOk()
-//                .expectBody(List.class)
-//                .value((ips) -> {
-//                    assertEquals(2, ips.size());
-//                });
-//    }
-
+//    @Disabled
 //    @Test
 //    @Order(3)
-//    public void findByIp() {
-//        webTestClient
-//                .get()
-//                .uri(uriBuilder -> uriBuilder
-//                        .path("/ip").queryParam("id", 1).build())
-//                .accept(MediaType.APPLICATION_JSON)
-//                .exchange()
-//                .expectStatus()
-//                .isOk()
-//                .expectBody(Ipv4.class)
-//                .value((ip) -> {
-//                    assertEquals("192.168.0.1", ip.getAddress());
-//                    assertEquals("Splunk", ip.getOrigin());
-//                });
-//    }
-//    
-//    @Test
-//    @Order(4)
-//    void delete() {
-//        webTestClient
-//                .delete()
-//                .uri(uriBuilder -> uriBuilder
-//                        .path("/").queryParam("id", 3).build())
-//                .accept(MediaType.APPLICATION_JSON)
-//                .exchange()
-//                .expectStatus()
-//	                .is2xxSuccessful();
-//    }
-    
+//    void loadDataToRedis() {    	
+//    	service.loadDataToRedis().subscribe(System.out::println);
+//    }    
 }
