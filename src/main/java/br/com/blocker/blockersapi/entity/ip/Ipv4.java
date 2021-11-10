@@ -14,8 +14,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(value = "ip")
 public class Ipv4 {
-	
-	@Id
+
+    public Ipv4(Integer address, String origin) {
+        this.address = address;
+        this.origin = origin;
+    }
+
+    @Id
     private Long id;
 	private Integer address;
     private String origin;

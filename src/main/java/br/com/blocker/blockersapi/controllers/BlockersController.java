@@ -40,5 +40,11 @@ public class BlockersController {
     @ResponseStatus(HttpStatus.OK)
     public Mono<String> getIp(@PathVariable String ip) {    	
     	return ipService.findByIdOnCache(ip);
-    }    
+    }
+
+    @GetMapping("/publish/ipv4")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<String> publish() {
+        return ipService.publishInternalsIpv4();
+    }
 }
