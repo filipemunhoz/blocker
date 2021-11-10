@@ -28,7 +28,7 @@ public class IpService {
 	@Autowired private Ipv6Repository ipv6Repository;
 	@Autowired private RedisRepository redisRepository;
 
-	private InetAddressValidator validator = InetAddressValidator.getInstance();
+	private final InetAddressValidator validator = InetAddressValidator.getInstance();
 	
 	public Mono<String> save(@RequestBody IpRequest request) {
 

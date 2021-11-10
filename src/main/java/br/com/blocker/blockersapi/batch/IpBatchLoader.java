@@ -12,7 +12,7 @@ import br.com.blocker.blockersapi.service.IpService;
 public class IpBatchLoader {
 	
 	@Autowired
-	static final IpService service = null;
+	private final IpService service = null;
 	
 	@Scheduled(fixedRate = 60 * 1000, initialDelay = 5 * 1000)
 	public void loadBlockedIpsToRedis() {
