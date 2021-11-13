@@ -117,12 +117,21 @@ class BlockerControllerTest {
                 .exchange()
                 .expectStatus()
                 .is4xxClientError();
-    }    
-    
-//    @Disabled
-//    @Test
-//    @Order(3)
-//    void loadDataToRedis() {    	
-//    	service.loadDataToRedis().subscribe(System.out::println);
-//    }    
+    }
+
+    @Test
+    void publishInternalsIpv4Test() {
+
+        webTestClient
+                .get()
+                .uri("/publish/ipv4")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful()
+                .expectBody(String.class)
+                .value(s ->
+                        assertEquals("Published IpV4", s)
+                );
+    }
 }

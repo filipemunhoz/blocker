@@ -67,5 +67,18 @@ class IpServiceTest {
 		StepVerifier.create(service.deleteById(1L))
 		.expectNextCount(1)
 		.verifyComplete();
-	}	
+	}
+
+	@Test
+	@Order(5)
+	void publishInternalsIpv4Test() {
+		StepVerifier.create(service.publishInternalsIpv4())
+				.expectNext("Published IpV4")
+				.verifyComplete();
+	}
+
+	@Test
+	void redis(){
+		service.loadDataToRedis();
+	}
 }
