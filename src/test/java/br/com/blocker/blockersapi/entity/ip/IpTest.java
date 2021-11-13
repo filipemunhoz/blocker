@@ -22,10 +22,13 @@ class IpTest {
     void ipv6Test(){
         byte[] addr = Base64.decodeBase64("fe80::3c8b:1dff:fee0:96ec");
         Ipv6 i = Ipv6.builder()
+                .id(1L)
                 .address(addr)
                 .origin("IpTestV6")
                 .build();
         final String addrV6 = Base64.encodeBase64String(i.getAddress());
+
+        Assert.assertEquals(Long.valueOf(1L), i.getId());
         Assert.assertEquals("fe803c8b1dfffee096ec", addrV6);
         Assert.assertEquals("IpTestV6", i.getOrigin());
     }
