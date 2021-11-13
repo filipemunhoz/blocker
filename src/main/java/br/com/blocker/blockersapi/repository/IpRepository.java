@@ -7,8 +7,5 @@ import br.com.blocker.blockersapi.entity.ip.Ipv4;
 
 @Repository
 public interface IpRepository extends ReactiveCrudRepository<Ipv4, Long> {
-	
-//    @Query("SELECT * FROM posts WHERE title like $1")
-//    Flux<Post> findByTitleContains(String name);
 
 }

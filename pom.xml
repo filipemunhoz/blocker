@@ -12,7 +12,7 @@
 
 	<groupId>br.com.blocker</groupId>
 	<artifactId>blockers-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>blockers-api</name>
 
 	<description>Blocker API</description>

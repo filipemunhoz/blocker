@@ -2,14 +2,16 @@ package br.com.blocker.blockersapi.configuration;
 
 import io.r2dbc.pool.ConnectionPool;
 import io.r2dbc.pool.ConnectionPoolConfiguration;
-import io.r2dbc.spi.*;
+import io.r2dbc.spi.ConnectionFactories;
+import io.r2dbc.spi.ConnectionFactory;
+import io.r2dbc.spi.ConnectionFactoryOptions;
+import io.r2dbc.spi.Option;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
 import org.springframework.r2dbc.connection.R2dbcTransactionManager;
 import org.springframework.transaction.ReactiveTransactionManager;
-import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
@@ -35,6 +37,7 @@ public class R2dbcConfig extends AbstractR2dbcConfiguration {
                 .option(DATABASE,"blocker")
                 .option(Option.valueOf("initialSize"),50)
                 .option(Option.valueOf("maxSize"),100)
+
                 .option(Option.valueOf("maximumPoolSize"),150)
                 .option(Option.valueOf("validationQuery"),"SELECT 1")
                 .option(Option.valueOf("maxLifeTime"),200)

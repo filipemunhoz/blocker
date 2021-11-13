@@ -35,18 +35,35 @@ class BlockerControllerTest {
         Flux.from(cf.create())
                 .flatMap(c ->
                         c.createBatch()
-                                .add("DROP TABLE IF EXISTS `blocker-test.ip`;")
-                                .add("DROP TABLE IF EXISTS `blocker-test.ipv6`;")
-                                .add("CREATE TABLE `blocker-test.ip` ( `id` int NOT NULL AUTO_INCREMENT, `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, `address` int NOT NULL, `origin` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,PRIMARY KEY (`id`) ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;")
-                                .add("insert into `blocker-test.ip` (address, origin) values ( '-1062797052', 'STS-Test') ")
-                                .add("insert into `blocker-test.ip` (address, origin) values ( '-1062797037', 'STS-Test') ")
-                                .add("CREATE TABLE `blocker-test.ipv6` (`id` int NOT NULL AUTO_INCREMENT, `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, `address` varbinary(16) NOT NULL,  `origin` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;")
+                                .add("DROP TABLE IF EXISTS `ip`;")
+                                .add("DROP TABLE IF EXISTS `ipv6`;")
+                                .add("CREATE TABLE `ip` ( `id` int NOT NULL AUTO_INCREMENT, `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, `address` int NOT NULL, `origin` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,PRIMARY KEY (`id`) ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;")
+                                .add("insert into `ip` (address, origin) values ( '-1062797052', 'IpServiceT') ")
+                                .add("insert into `ip` (address, origin) values ( '-1062797037', 'IpServiceT') ")
+                                .add("CREATE TABLE `ipv6` (`id` int NOT NULL AUTO_INCREMENT, `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, `address` varbinary(16) NOT NULL,  `origin` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;")
+                                .add("insert into `ipv6` (address, origin) values ( INET6_ATON('fe80::a8c6:6cff:fe96:7fd1'), 'Ipv6Test') ")
                                 .execute()
                 )
                 .log()
                 .blockLast();
     }
-	
+
+    @Test
+    void getIpV4Test() {
+
+        webTestClient
+                .get()
+                .uri("/192.167.1.4")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful()
+                .expectBody(String.class)
+                .value(s ->
+                        assertEquals("IpServiceT", s)
+                );
+    }
+
     @Test
     @Order(1)
     void addIpV4() {

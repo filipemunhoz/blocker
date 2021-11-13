@@ -18,7 +18,7 @@ class IpServiceTest {
     
 	@Autowired
 	IpService service;
-	
+
     @BeforeEach
     void setUp() {
         Flux.from(cf.create())
@@ -26,11 +26,11 @@ class IpServiceTest {
                         c.createBatch()
                                 .add("DROP TABLE IF EXISTS `ip`;")
                                 .add("DROP TABLE IF EXISTS `ipv6`;")
-                                .add("CREATE TABLE ip ( `id` int NOT NULL AUTO_INCREMENT, `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, `address` int NOT NULL, `origin` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,PRIMARY KEY (`id`) ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;")
-                                .add("insert into ip(address, origin) values ( '-1062797052', 'IpServiceT') ")
-                                .add("insert into ip(address, origin) values ( '-1062797037', 'IpServiceT') ")
+                                .add("CREATE TABLE `ip` ( `id` int NOT NULL AUTO_INCREMENT, `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, `address` int NOT NULL, `origin` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,PRIMARY KEY (`id`) ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;")
+                                .add("insert into `ip` (address, origin) values ( '-1062797052', 'IpServiceT') ")
+                                .add("insert into `ip` (address, origin) values ( '-1062797037', 'IpServiceT') ")
                                 .add("CREATE TABLE `ipv6` (`id` int NOT NULL AUTO_INCREMENT, `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, `address` varbinary(16) NOT NULL,  `origin` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;")
-                                .add("insert into ipv6(address, origin) values ( INET6_ATON('fe80::a8c6:6cff:fe96:7fd1'), 'Ipv6Test') ")
+                                .add("insert into `ipv6` (address, origin) values ( INET6_ATON('fe80::a8c6:6cff:fe96:7fd1'), 'Ipv6Test') ")
                                 .execute()
                 )
                 .log()
@@ -75,10 +75,5 @@ class IpServiceTest {
 		StepVerifier.create(service.publishInternalsIpv4())
 				.expectNext("Published IpV4")
 				.verifyComplete();
-	}
-
-	@Test
-	void redis(){
-		service.loadDataToRedis();
 	}
 }
