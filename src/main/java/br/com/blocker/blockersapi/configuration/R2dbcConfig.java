@@ -30,7 +30,7 @@ public class R2dbcConfig extends AbstractR2dbcConfiguration {
     public ConnectionFactory connectionFactory(){
         ConnectionFactory connectionFactory = ConnectionFactories.get(ConnectionFactoryOptions.builder()
                 .option(DRIVER,"mysql")
-                .option(HOST,"localhost")
+                .option(HOST,"mysql")
                 .option(PORT,3306)
                 .option(USER,username)
                 .option(PASSWORD,password)

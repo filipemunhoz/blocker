@@ -1,5 +1,8 @@
 package br.com.blocker.blockersapi.controllers;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +39,21 @@ public class BlockersController {
     			.body(ipService.save(request)); 
     }
     
+    @GetMapping("/info")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<String> getBasicInfo() throws UnknownHostException {
+    	InetAddress ip = InetAddress.getLocalHost();
+
+    	String response = String.format("System info: %s", ip);
+    	
+    	return Mono.just(response);
+    }
+    
     @GetMapping("{ip}")
     @ResponseStatus(HttpStatus.OK)
     public Mono<String> getIp(@PathVariable String ip) {    	
     	return ipService.findByIdOnCache(ip);
-    }
+    }    
 
     @GetMapping("/publish/ipv4")
     @ResponseStatus(HttpStatus.OK)

@@ -21,6 +21,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.InetAddress;
+import java.time.Duration;
 
 @Service
 public class IpService {
@@ -82,7 +83,7 @@ public class IpService {
     }
     
     public Mono<String> findByIdOnCache(String ip) {
-    	return redisRepository.getOperations().opsForValue().get(ip);
+    	return redisRepository.getOperations().opsForValue().get(ip).timeout(Duration.ofMillis(100));
     }
     
     public Flux<Ipv4> findAll() {

@@ -1,0 +1,101 @@
+﻿version: '3.8'
+
+services:
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus-grafana/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9091:9090
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - ./prometheus-grafana/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./prometheus-grafana/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
+    ports:
+      - 3000:3000
+    links:
+      - prometheus
+
+  lb:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "9090:9090"
+    depends_on:
+      - service1
+      - service2
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=blocker
+      - MYSQL_USER=blocker
+      - MYSQL_PASSWORD=b10ck3r
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  service1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8181:8080"
+    links:
+      - redis
+      - mysql
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - DATABASE_HOST=mysql
+      - DATABASE_USER=blocker
+      - DATABASE_PASSWORD=b10ck3r
+      - DATABASE_NAME=blocker
+      - DATABASE_PORT=3306
+
+  service2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8282:8080"
+    links:
+      - redis
+      - mysql
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - DATABASE_HOST=mysql
+      - DATABASE_USER=blocker
+      - DATABASE_PASSWORD=b10ck3r
+      - DATABASE_NAME=blocker
+      - DATABASE_PORT=3306
+
+  redis:
+    container_name: redis
+    image: redis:6.0.9
+    ports:
+      - 6379:6379
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+    - REDIS_HOSTS=redis:redis
+    ports:
+    - "8081:8081"
+networks:
+  default:
+    external:
+      name: my_network
+     
